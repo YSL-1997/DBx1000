@@ -42,9 +42,9 @@ def read_result(results_dir):
                 *_,
             ) = summary.split()
 
-            workload, alg, index_type, num_threads = job_name.split(",")
+            workload, alg, index_type, num_threads, fanout = job_name.split(",")
 
-            yield workload, alg, index_type, int(num_threads), parse(txn_cnt) / parse(time_index)
+            yield workload, alg, index_type, int(num_threads), parse(txn_cnt) / parse(time_index), fanout
 
 
 def main(results_dir):
@@ -60,7 +60,8 @@ def main(results_dir):
     for i, (key, items) in enumerate(grouped_res.items()):
         workload, alg, index_type = key
 
-        num_threads_lst = [e[3] for e in items]
+        fanout_lst = [e[5] for e in items]
+        print(fanout_lst)
         run_time_lst = [e[4] for e in items]
         label = " ".join(key)
 
@@ -73,14 +74,14 @@ def main(results_dir):
 
         plt.subplot(2, 2, index[(index_type, workload)])
 
-        plt.plot(num_threads_lst, run_time_lst, label=alg, marker='o')
-        plt.xscale("log", basex=2)
-        plt.xlabel("Number of threads")
+        plt.plot(fanout_lst, run_time_lst, label=alg, marker='o')
+        # plt.xscale("log", basex=2)
+        plt.xlabel("Number of fanout")
         plt.ylabel("Throughput (txn/sec)")
         plt.legend()
         plt.title(f"{workload} {index_type}")
 
-    plt.savefig(results_dir / "plot.png")
+    plt.savefig(results_dir / "4_2_fanout_plot.png")
 
 
 if __name__ == "__main__":

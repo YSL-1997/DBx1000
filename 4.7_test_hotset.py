@@ -69,8 +69,8 @@ def main():
     algs = ["NO_WAIT"]
     indices = ["IDX_BTREE", "IDX_HASH"]
     num_threads_lst = [32]
-    workloads = ["TPCC"]
-    zipf_theta_list = [0.6, 0.8, 0.9, 0.99, 0.999]
+    workloads = ["YCSB"]
+    zipf_theta_list = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]
 
     jobs = {
         f"{workload},{alg},{index},{num_threads},{zipf_theta}": {

@@ -42,9 +42,9 @@ def read_result(results_dir):
                 *_,
             ) = summary.split()
 
-            workload, alg, index_type, num_threads = job_name.split(",")
+            workload, alg, index_type, num_threads, hotset_perc = job_name.split(",")
 
-            yield workload, alg, index_type, int(num_threads), parse(txn_cnt) / parse(time_index)
+            yield workload, alg, index_type, int(num_threads), parse(txn_cnt) / parse(time_index), hotset_perc
 
 
 def main(results_dir):
@@ -60,8 +60,24 @@ def main(results_dir):
     for i, (key, items) in enumerate(grouped_res.items()):
         workload, alg, index_type = key
 
-        num_threads_lst = [e[3] for e in items]
+        hotset_perc_lst = [e[5] for e in items]
         run_time_lst = [e[4] for e in items]
+        print(hotset_perc_lst)
+        print(run_time_lst)
+
+        d = {hotset_perc_lst[i]:run_time_lst[i] for i in range(len(hotset_perc_lst))}
+
+        sorted_hotset_perc_lst = []
+        sorted_run_time_lst = []
+
+        for key in sorted(d.keys()):
+          print("append", key)
+          sorted_hotset_perc_lst.append(key)
+          sorted_run_time_lst.append(d[key])
+
+        print(sorted_hotset_perc_lst)
+        print(sorted_run_time_lst)
+        
         label = " ".join(key)
 
         index = {
@@ -73,16 +89,16 @@ def main(results_dir):
 
         plt.subplot(2, 2, index[(index_type, workload)])
 
-        plt.plot(num_threads_lst, run_time_lst, label=alg, marker='o')
-        plt.xscale("log", basex=2)
-        plt.xlabel("Number of threads")
+        plt.plot(sorted_hotset_perc_lst, sorted_run_time_lst, label=alg, marker='o')
+        # plt.xscale("log", basex=2)
+        plt.xlabel("Hotset Percentage")
         plt.ylabel("Throughput (txn/sec)")
         plt.legend()
         plt.title(f"{workload} {index_type}")
 
-    plt.savefig(results_dir / "plot.png")
+    plt.savefig(results_dir / "4_7_hotset_perc_plot.png")
 
 
 if __name__ == "__main__":
-    results_dir = Path("4_2_results")
+    results_dir = Path("4_7_results")
     main(results_dir)
