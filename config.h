@@ -58,7 +58,7 @@
 #define ENABLE_LATCH				true
 #define CENTRAL_INDEX				false
 #define CENTRAL_MANAGER 			false
-#define INDEX_STRUCT IDX_HASH
+#define INDEX_STRUCT IDX_BTREE
 #define BTREE_ORDER 				16
 
 // [DL_DETECT] 
@@ -117,7 +117,7 @@
 // ==== [YCSB] ====
 #define INIT_PARALLELISM			40
 #define SYNTH_TABLE_SIZE 			(1024 * 40)
-#define ZIPF_THETA 0.99
+#define ZIPF_THETA 					0.6
 #define READ_PERC 					0.9
 #define WRITE_PERC 					0.1
 #define SCAN_PERC 					0
@@ -135,7 +135,7 @@
 // are not modeled.
 #define TPCC_ACCESS_ALL 			false 
 #define WH_UPDATE					true
-#define NUM_WH 						1
+#define NUM_WH 100
 //
 enum TPCCTxnType {TPCC_ALL, 
 				TPCC_PAYMENT, 

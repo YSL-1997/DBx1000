@@ -9,7 +9,7 @@ from pathlib import Path
 
 CFG_STD = "config-std.h"
 CFG_CURR = "config.h"
-RESULTS_DIR = Path("results")
+RESULTS_DIR = Path("4_3_results")
 
 
 def replace(filename, pattern, replacement):
@@ -66,27 +66,26 @@ def test_run(name, job, result_dir):
 
 
 def main():
-    algs = ["DL_DETECT", "NO_WAIT", "HEKATON", "SILO", "TICTOC"]
+    # algs = ["DL_DETECT", "NO_WAIT", "HEKATON", "SILO", "TICTOC"]
+    algs = ["NO_WAIT"]
     indices = ["IDX_BTREE", "IDX_HASH"]
-    num_threads_lst = [2 ** n for n in range(1, 10)]
-    # workloads = ["YCSB", "TPCC"]
-
-    # num_threads_lst = range(1, 1000, 50)
-    # indices = ["IDX_HASH"]
-    # algs = ["NO_WAIT"]
+    num_threads_lst = [2*i for i in range(1, 101)]
     workloads = ["YCSB"]
+    num_wh_lst = [100]
 
     jobs = {
-        f"{workload},{alg},{index},{num_threads}": {
+        f"{workload},{alg},{index},{num_threads},{num_wh}": {
             "WORKLOAD": workload,
             "CORE_CNT": num_threads,
             "CC_ALG": alg,
             "INDEX_STRUCT": index,
+            "NUM_WH": num_wh
         }
         for workload in workloads
         for alg in algs
         for index in indices
         for num_threads in num_threads_lst
+        for num_wh in num_wh_lst
     }
 
     for name, job in jobs.items():
