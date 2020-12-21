@@ -42,9 +42,9 @@ def read_result(results_dir):
                 *_,
             ) = summary.split()
 
-            workload, alg, index_type, num_threads = job_name.split(",")
+            workload, alg, index_type, num_threads,num_wh = job_name.split(",")
 
-            yield workload, alg, index_type, int(num_threads), parse(txn_cnt) / parse(time_index)
+            yield workload, alg, index_type, int(num_threads), parse(txn_cnt) / parse(time_index), num_wh
 
 
 def main(results_dir):
@@ -74,7 +74,7 @@ def main(results_dir):
         plt.subplot(2, 2, index[(index_type, workload)])
 
         plt.plot(num_threads_lst, run_time_lst, label=alg, marker='o')
-        plt.xscale("log", basex=2)
+        # plt.xscale("log", basex=2)
         plt.xlabel("Number of threads")
         plt.ylabel("Throughput (txn/sec)")
         plt.legend()
